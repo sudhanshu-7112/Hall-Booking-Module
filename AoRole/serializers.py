@@ -1,3 +1,4 @@
+from urllib import request
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from rest_framework import serializers
@@ -21,7 +22,9 @@ class Conference_HallSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=Conference_Hall
-        fields='__all__'
+        exclude=['occupied']
+        extra_kwargs = {'Description': {'required': False}}
+
 
 
 class Conference_ImagesSerializer(serializers.ModelSerializer):

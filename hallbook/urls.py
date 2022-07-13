@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from AoRole.serializers import JWTAuthentication
-from AoRole.views import Userdetails
+from AoRole.views import Halls, Logout, Userdetails
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(serializer_class=JWTAuthentication)),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('AO/',include('AoRole.urls')),
-    path('user',Userdetails.as_view())
+    path('user',Userdetails.as_view()),
+    path('Halls',Halls.as_view()),
+    path('logout',Logout.as_view())
 ]

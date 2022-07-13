@@ -1,5 +1,5 @@
 from rest_framework import generics
-from AoRole.models import Conference_Images
+from AoRole.models import Conference_Hall, Conference_Images
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -16,22 +16,28 @@ class Halls(APIView):
     permission_classes = [IsSuperUser]
 
     def post(self, request):
+        print(request.data)
         serializer=Conference_HallSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
         else:
-            return serializer.errors
+            print(serializer.errors)
+            return Response(serializer.errors)
         
         Hall=serializer.data['id']
         files=request.FILES.getlist('image')
         for f in files:
-            serializer=Conference_ImagesSerializer(data={'Hall':Hall,'image':f})
-            if serializer.is_valid():
-                serializer.save()
+            serializerimage=Conference_ImagesSerializer(data={'Hall':Hall,'image':f})
+            if serializerimage.is_valid():
+                serializerimage.save()
             else:
-                return serializer.errors
-        return Response({'message':'Uploaded succesfully'}, status=status.HTTP_201_CREATED)
-
+                return Response(serializerimage.errors)
+        return Response(serializer.data)
+    
+    def get(self, request):
+        halls=Conference_Hall.objects.filter(occupied=False)
+        serializer=Conference_HallSerializer(halls, many=True)
+        return Response(serializer.data)
 
 class hallimage(generics.ListAPIView):
     permission_classes = [IsSuperUser]
@@ -43,7 +49,6 @@ class hallimage(generics.ListAPIView):
     def get_serializer_class(self):
         return Conference_ImagesSerializer
 
-
 class Userdetails(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     # throttle_classes = [UserRateThrottle]
@@ -54,7 +59,6 @@ class Userdetails(generics.ListAPIView):
 
     def get_serializer_class(self):
         return UserSerializer
-
 
 class Logout(APIView):
     

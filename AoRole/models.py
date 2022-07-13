@@ -12,3 +12,8 @@ class Conference_Hall(models.Model):
 class Conference_Images(models.Model):
     Hall=models.ForeignKey(Conference_Hall, on_delete=models.CASCADE, related_name='hall')
     image=models.FileField(upload_to='images')
+
+
+class DynamicPanel(models.Model):
+    role=models.CharField(max_length=3)
+    url=models.URLField()
