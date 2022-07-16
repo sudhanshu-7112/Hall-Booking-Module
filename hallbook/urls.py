@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from AoRole.serializers import JWTAuthentication
-from AoRole.views import AllHall, Ao_Pending, Ao_Report, AoApproval, Book_Hall, Department_Names, Halls, Hallsdropdown, Hod_accepted_rejected, Hod_pending_forms, HodApproval, Logout, Panel, Register, Userdetails
+from AoRole.views import AllHall, Ao_Pending, Ao_Report, AoApproval, Book_Hall, Halls, Hallsdropdown, Hod_accepted_rejected, Hod_pending_forms, HodApproval, Logout, Panel, Register, Userdetails
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,7 +30,6 @@ urlpatterns = [
     path('Halls', Halls.as_view()),
     path('logout', Logout.as_view()),
     path('LeftPanel', Panel.as_view()),
-    path('departments', Department_Names.as_view()),
     path('bookhall', Book_Hall.as_view()),
     path('register', Register.as_view()),
     path('allhalls', AllHall.as_view()),

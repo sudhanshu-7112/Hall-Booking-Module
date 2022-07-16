@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 # from rest_framework.throttling import UserRateThrottle
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-from AoRole.serializers import AoApprovalSerializer, Conference_Hall_Places, Conference_HallSerializer, Conference_ImagesSerializer, DynamicPanelSerializer, Hall_book_Serializer, Hall_booking_Form_Serializer, HodApprovalSerializer, HodRoleSerializer, UserDepartmentSerializer, UserSerializer
+from AoRole.serializers import AoApprovalSerializer, Conference_Hall_Places, Conference_HallSerializer, Conference_ImagesSerializer, DynamicPanelSerializer, Hall_book_Serializer, Hall_booking_Form_Serializer, HodApprovalSerializer, HodRoleSerializer, UserSerializer
 from .user import IsSuperUser
 
 # Create your views here.
@@ -94,12 +94,6 @@ class Panel(generics.ListAPIView):
 
     def get_serializer_class(self):
         return DynamicPanelSerializer
-
-class Department_Names(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = UserDepartment.objects.all()
-    serializer_class = UserDepartmentSerializer
-
 
 class AllHall(APIView):
     permission_classes = [IsAuthenticated]
@@ -244,7 +238,7 @@ class Ao_Pending(generics.ListAPIView):
     queryset = Hall_booking_Form.objects.exclude((
         Q(booked=True) | Q(booked=False)) | (Q(Hod_approval=None)))
     serializer_class = Hall_booking_Form_Serializer
-
+        
 
 class Logout(APIView):
 

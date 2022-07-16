@@ -62,15 +62,6 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Departments
         fields = '__all__'
 
-
-class UserDepartmentSerializer(serializers.ModelSerializer):
-    department = DepartmentSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = UserDepartment
-        fields = ('department',)
-
-
 class Hall_booking_Form_Serializer(serializers.ModelSerializer):
     emp_department = serializers.CharField(
         source='emp_department.department.department')
