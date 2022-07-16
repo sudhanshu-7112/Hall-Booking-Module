@@ -39,7 +39,7 @@ class Halls(APIView):
         return Response({'messgae': 'Uploaded Succesfully'}, status=status.HTTP_201_CREATED)
 
     def get(self, request):
-        halls = Conference_Hall.objects.filter(occupied=False)
+        halls = Conference_Hall.objects.all()
         serializer = Conference_HallSerializer(halls, many=True)
         return Response(serializer.data)
 
@@ -95,7 +95,6 @@ class Panel(generics.ListAPIView):
     def get_serializer_class(self):
         return DynamicPanelSerializer
 
-
 class Department_Names(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     queryset = UserDepartment.objects.all()
@@ -120,7 +119,7 @@ class AllHall(APIView):
         else:
             Pending_Bookings.objects.create(
                 user=user, from_date=fd, to_date=to, Participant_count=count)
-        available_places = Pending_Bookings.objects.filter((Q(from_date__gt=fd) & Q(
+        available_places = Booked_Hall.objects.filter((Q(from_date__gt=fd) & Q(
             to_date__gt=to)) | (Q(to_date__lt=fd) & Q(to_date__lt=to)))
         serializer = Conference_Hall_Places(available_places, many=True)
         exclude_list = []
@@ -200,7 +199,7 @@ class AoApproval(APIView):
 
     def put(self, request, pk):
         queryset = Hall_booking_Form.objects.get(id=pk)
-        request.data['time_stamp_Ao'] = datetime.now()
+        request.data['time_stamp_AO'] = datetime.now()
         serializer = AoApprovalSerializer(queryset, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -220,6 +219,11 @@ class Ao_Report(APIView):
     def get(self, request, pk):
         today = datetime.today()
         filtering = datetime.today()
+        if(pk == 0):
+            queryset = Hall_booking_Form.objects.filter(
+                ((Q(booked=True) | Q(booked=False))) & (Q(Hod_approval=True) | Q(Hod_approval=False)))
+            serializer = Hall_book_Serializer(queryset, many=True)
+            return Response(serializer.data)
         if(pk == 1):
             filtering = timedelta(days=1)
         elif(pk == 2):
@@ -227,29 +231,19 @@ class Ao_Report(APIView):
         elif(pk == 3):
             filtering = timedelta(days=30)
         elif(pk == 4):
-            filtering = timedelta(day=365)
+            filtering = timedelta(days=365)
         filtering_date = today-filtering
         queryset = Hall_booking_Form.objects.filter(
-            (Q(booked=True) | Q(booked=False)) & Q(submit_time_emp__gt=filtering_date))
-        serializer = Conference_HallSerializer(queryset, many=True)
+            ((Q(booked=True) | Q(booked=False)) & Q(submit_time_emp__gt=filtering_date)) & Q(Hod_approval=True) | Q(Hod_approval=False))
+        serializer = Hall_book_Serializer(queryset, many=True)
         return Response(serializer.data)
 
 
 class Ao_Pending(generics.ListAPIView):
     permission_classes = [IsSuperUser]
     queryset = Hall_booking_Form.objects.exclude((
-        Q(booked=True) | Q(booked=False)) |( Q(Hod_approval=None)))
+        Q(booked=True) | Q(booked=False)) | (Q(Hod_approval=None)))
     serializer_class = Hall_booking_Form_Serializer
-
-
-class Ao_accepted_rejected(APIView):
-    permission_classes = [IsAdminUser]
-
-    def get(self, request, pk):
-        queryset = Hall_booking_Form.objects.filter(booked=pk)
-        serializer = HodRoleSerializer(queryset, many=True)
-        print(serializer.data['from_date'])
-        return Response(serializer.data)
 
 
 class Logout(APIView):
