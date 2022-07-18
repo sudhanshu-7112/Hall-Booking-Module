@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from rest_framework import generics
-from AoRole.models import Booked_Hall, Conference_Hall, Conference_Images, DynamicPanel, Hall_booking_Form, Pending_Bookings, UserDepartment
+from AoRole.authentication import AllowAll
+from AoRole.models import Conference_Hall, Conference_Images, Contact, DynamicPanel, Hall_booking_Form, Pending_Bookings, UserDepartment
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ from django.contrib.auth.models import User
 # from rest_framework.throttling import UserRateThrottle
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-from AoRole.serializers import AoApprovalSerializer, Conference_Hall_Places, Conference_HallSerializer, Conference_ImagesSerializer, DynamicPanelSerializer, Hall_book_Serializer, Hall_booking_Form_Serializer, HodApprovalSerializer, HodRoleSerializer, UserSerializer
+from AoRole.serializers import AoApprovalSerializer, Conference_Hall_Available, Conference_Hall_Places, Conference_HallSerializer, Conference_ImagesSerializer, ContactSerializer, DynamicPanelSerializer, Hall_book_Serializer, Hall_book_emp_Serializer, Hall_booking_Form_Serializer, HodApprovalSerializer, HodRoleSerializer, UserSerializer
 from .user import IsSuperUser
 
 # Create your views here.
@@ -24,8 +25,7 @@ class Halls(APIView):
         if serializer.is_valid():
             serializer.save()
         else:
-            print(serializer.errors)
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         Hall = serializer.data['id']
         files = request.FILES.getlist('image')
@@ -35,8 +35,11 @@ class Halls(APIView):
             if serializerimage.is_valid():
                 serializerimage.save()
             else:
-                return Response(serializerimage.errors)
-        return Response({'messgae': 'Uploaded Succesfully'}, status=status.HTTP_201_CREATED)
+                return Response(serializerimage.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not files:
+            Conference_Hall.objects.filter(id=Hall).delete()
+            return Response(serializerimage.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Hall Added Succesfully'}, status=status.HTTP_201_CREATED)
 
     def get(self, request):
         halls = Conference_Hall.objects.all()
@@ -95,6 +98,7 @@ class Panel(generics.ListAPIView):
     def get_serializer_class(self):
         return DynamicPanelSerializer
 
+
 class AllHall(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -110,17 +114,17 @@ class AllHall(APIView):
             pending[0].to_date = to
             pending[0].Participant_count = count
             pending[0].save()
-        else:
+        elif not self.request.user.is_superuser:
             Pending_Bookings.objects.create(
                 user=user, from_date=fd, to_date=to, Participant_count=count)
-        available_places = Booked_Hall.objects.filter((Q(from_date__gt=fd) & Q(
-            to_date__gt=to)) | (Q(to_date__lt=fd) & Q(to_date__lt=to)))
-        serializer = Conference_Hall_Places(available_places, many=True)
-        exclude_list = []
+        available_places = Hall_booking_Form.objects.filter(((Q(from_date__gte=fd) & Q(
+            from_date__lte=to)) | (Q(from_date__lte=fd) & Q(to_date__gte=to))) | (Q(to_date__gte=fd) & Q(to_date__lte=to)) & (Q(booked=True)))
+        serializer = Conference_Hall_Available(available_places, many=True)
+        excluding_list = []
         for i in serializer.data:
-            exclude_list.append(i['id'])
+            excluding_list.append(i['Hall_name'])
         available_places = Conference_Hall.objects.exclude(
-            (Q(id__in=exclude_list)) | (Q(occupancy__lt=count)))
+            id__in=excluding_list).exclude(occupancy__lt=count)
         serializer = Conference_Hall_Places(available_places, many=True)
         return Response(serializer.data)
 
@@ -139,14 +143,14 @@ class Book_Hall(APIView):
         request.data['Participant_count'] = temporary.Participant_count
         department = UserDepartment.objects.get(user=u)
         request.data['emp_department'] = department.department.id
-        serializer = Hall_book_Serializer(data=request.data)
+        serializer = Hall_book_emp_Serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             temporary.delete()
         else:
             print(serializer.errors)
             return Response(serializer.errors)
-        return Response({'message': 'Succesfully Filled Form'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Hall Booked Successfully'}, status=status.HTTP_201_CREATED)
 
 
 class Hallsdropdown(generics.ListAPIView):
@@ -200,8 +204,6 @@ class AoApproval(APIView):
             if(request.data['booked'] == 1):
                 queryset = Hall_booking_Form.objects.get(id=pk)
                 hall = Conference_Hall.objects.get(id=request.data['hall'])
-                Booked_Hall.objects.create(
-                    from_date=queryset.from_date, to_date=queryset.to_date, hall=hall)
             return Response({'message': 'Succesfull'})
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -238,7 +240,38 @@ class Ao_Pending(generics.ListAPIView):
     queryset = Hall_booking_Form.objects.exclude((
         Q(booked=True) | Q(booked=False)) | (Q(Hod_approval=None)))
     serializer_class = Hall_booking_Form_Serializer
-        
+
+
+class Contact_issue(APIView):
+    authentication_classes = [AllowAll]
+
+    def get(self, request):
+        queryset = Contact.objects.all()
+        serializer = ContactSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ContactSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({'message', 'Error'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        return Response({'message': 'Issue has been reported'}, status=status.HTTP_201_CREATED)
+
+
+class ResolveIssue(APIView):
+
+    def delete(self, request, pk):
+        queryset = Contact.objects.filter(id=self.kwargs.get('pk'))
+        queryset.delete()
+        return Response({'message': 'Issue succesfully resolved'}, status=status.HTTP_202_ACCEPTED)
+
+
+class No_Response_Ao(generics.ListAPIView):
+    permission_classes = [IsAdminUser]
+    queryset = Hall_booking_Form.objects.filter(
+        Q(Hod_approval=True) & (Q(booked=None)))
+    serializer_class = HodRoleSerializer
+
 
 class Logout(APIView):
 

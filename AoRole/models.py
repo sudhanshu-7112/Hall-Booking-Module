@@ -23,12 +23,6 @@ class Pending_Bookings(models.Model):
     Participant_count = models.IntegerField()
 
 
-class Booked_Hall(models.Model):
-    hall = models.ForeignKey(Conference_Hall, on_delete=models.CASCADE)
-    from_date = models.DateTimeField()
-    to_date = models.DateTimeField()
-
-
 class DynamicPanel(models.Model):
     role = models.CharField(max_length=3)
     name = models.CharField(max_length=15)
@@ -61,3 +55,9 @@ class Hall_booking_Form(models.Model):
     Ao_remark = models.TextField(blank=True, null=True)
     time_stamp_AO = models.DateTimeField(blank=True, null=True)
     booked = models.BooleanField(blank=True, null=True)
+
+
+class Contact(models.Model):
+    name=models.CharField(max_length=30)
+    email=models.EmailField()
+    message=models.TextField()

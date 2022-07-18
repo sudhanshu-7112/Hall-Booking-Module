@@ -35,7 +35,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -93,14 +93,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'hallbook',
-        'USER' : 'root',
-        'PASSWORD' : 'Pass@123',
-        'HOST' : '127.0.0.1',
-        'PORT' : '3306',
-        'OPTIONS': {  
+        'USER': 'root',
+        'PASSWORD': 'Pass@123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             "init_command": "SET foreign_key_checks = 0;"
-        }  
+        }
     }
 }
 
@@ -129,15 +129,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
 USE_TZ = True
 
-MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-MEDIA_URL='/media/'
+MEDIA_URL = '/media/'
 
 
 # Static files (CSS, JavaScript, Images)

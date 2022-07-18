@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from AoRole.models import Conference_Hall, Conference_Images, Departments, DynamicPanel, Hall_booking_Form, UserDepartment
+from AoRole.models import Conference_Hall, Conference_Images, Contact, Departments, DynamicPanel, Hall_booking_Form
 # from AoRole.views import Book_Hall
 
 
@@ -34,6 +34,13 @@ class Conference_Hall_Places(serializers.ModelSerializer):
         fields = ('id', 'Hall_name')
 
 
+class Conference_Hall_Available(serializers.ModelSerializer):
+
+    class Meta:
+        model = Hall_booking_Form
+        fields = ('Hall_name',)
+
+
 class Conference_ImagesSerializer(serializers.ModelSerializer):
     hall = Conference_HallSerializer(read_only=True, many=True)
 
@@ -62,6 +69,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Departments
         fields = '__all__'
 
+
 class Hall_booking_Form_Serializer(serializers.ModelSerializer):
     emp_department = serializers.CharField(
         source='emp_department.department.department')
@@ -77,6 +85,13 @@ class Hall_book_Serializer(serializers.ModelSerializer):
     emp_department = serializers.CharField(
         source='emp_department.department.department')
     Hall_name = serializers.CharField(source='Hall_name.Hall_name')
+
+    class Meta:
+        model = Hall_booking_Form
+        fields = '__all__'
+
+
+class Hall_book_emp_Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hall_booking_Form
@@ -106,3 +121,10 @@ class AoApprovalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hall_booking_Form
         fields = ('booked', 'time_stamp_AO')
+
+
+class ContactSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Contact
+        fields = '__all__'
