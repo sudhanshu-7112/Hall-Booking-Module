@@ -12,7 +12,7 @@ class JWTAuthentication(TokenObtainPairSerializer):
             'username': '',
             'password': attrs.get("password")
         }
-        user_obj = User.objects.filter(email=attrs.get("username"))
+        user_obj = User.objects.filter(email__exact=attrs.get("username"))
         if user_obj:
             credentials['username'] = user_obj[0].username
 
