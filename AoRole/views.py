@@ -120,11 +120,14 @@ class AllHall(APIView):
         available_places = Hall_booking_Form.objects.filter(((Q(from_date__gte=fd) & Q(
             from_date__lte=to)) | (Q(from_date__lte=fd) & Q(to_date__gte=to))) | (Q(to_date__gte=fd) & Q(to_date__lte=to)) & (Q(booked=True)))
         serializer = Conference_Hall_Available(available_places, many=True)
+        fd=fd.replace('-','/')
+        to=to.replace('-','/')
+        days_book=datetime.strptime(to, '%Y/%m/%d %H:%M:%S')-datetime.strptime(fd, '%Y/%m/%d %H:%M:%S')
         excluding_list = []
         for i in serializer.data:
             excluding_list.append(i['Hall_name'])
         available_places = Conference_Hall.objects.exclude(
-            id__in=excluding_list).exclude(occupancy__lt=count)
+            id__in=excluding_list).exclude(occupancy__lt=count).exclude(max_booking_days__lt=days_book.days)
         serializer = Conference_Hall_Places(available_places, many=True)
         return Response(serializer.data)
 
