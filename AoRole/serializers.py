@@ -106,7 +106,7 @@ class HodRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hall_booking_Form
         exclude = ('time_stamp_Hod', 'Ao_remark',
-                   'time_stamp_AO', 'booked', 'Hod_approval')
+                   'time_stamp_AO', 'Hod_approval')
 
 
 class HodApprovalSerializer(serializers.ModelSerializer):

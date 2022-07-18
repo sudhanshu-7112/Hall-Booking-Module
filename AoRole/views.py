@@ -118,16 +118,13 @@ class AllHall(APIView):
             Pending_Bookings.objects.create(
                 user=user, from_date=fd, to_date=to, Participant_count=count)
         available_places = Hall_booking_Form.objects.filter(((Q(from_date__gte=fd) & Q(
-            from_date__lte=to)) | (Q(from_date__lte=fd) & Q(to_date__gte=to))) | (Q(to_date__gte=fd) & Q(to_date__lte=to)) & (Q(booked=True)))
+            from_date__lte=to)) | (Q(from_date__lte=fd) & Q(to_date__gte=to))| (Q(to_date__gte=fd) & Q(to_date__lte=to)) )& (Q(booked=True)))
         serializer = Conference_Hall_Available(available_places, many=True)
-        fd=fd.replace('-','/')
-        to=to.replace('-','/')
-        days_book=datetime.strptime(to, '%Y/%m/%d %H:%M:%S')-datetime.strptime(fd, '%Y/%m/%d %H:%M:%S')
         excluding_list = []
         for i in serializer.data:
             excluding_list.append(i['Hall_name'])
         available_places = Conference_Hall.objects.exclude(
-            id__in=excluding_list).exclude(occupancy__lt=count).exclude(max_booking_days__lt=days_book.days)
+            id__in=excluding_list).exclude(occupancy__lt=count)
         serializer = Conference_Hall_Places(available_places, many=True)
         return Response(serializer.data)
 
@@ -233,7 +230,7 @@ class Ao_Report(APIView):
             filtering = timedelta(days=365)
         filtering_date = today-filtering
         queryset = Hall_booking_Form.objects.filter(
-            ((Q(booked=True) | Q(booked=False)) & Q(submit_time_emp__gt=filtering_date)) & Q(Hod_approval=True) | Q(Hod_approval=False))
+            (Q(booked=True) | Q(booked=False)) & (Q(submit_time_emp__gt=filtering_date)) & (Q(Hod_approval=True) | Q(Hod_approval=False)))
         serializer = Hall_book_Serializer(queryset, many=True)
         return Response(serializer.data)
 
