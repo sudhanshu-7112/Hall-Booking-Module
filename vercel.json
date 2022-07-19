@@ -1,0 +1,13 @@
+{
+    "builds": [{
+        "src": "hallbook/wsgi.py",
+        "use": "@ardnt/vercel-python-wsgi",
+        "config": { "maxLambdaSize": "15mb" }
+    }],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "hallbook/wsgi.py"
+        }
+    ]
+}
