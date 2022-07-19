@@ -1,1 +1,1 @@
-web: gunicorn hallbook.wsgi --log-file
+web: gunicorn hallbook.wsgi --log-file -

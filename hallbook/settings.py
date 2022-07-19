@@ -35,7 +35,7 @@ DEBUG = False
 
 # SESSION_COOKIE_HTTPONLY = False
 
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
