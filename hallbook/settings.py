@@ -113,20 +113,21 @@ WSGI_APPLICATION = 'hallbook.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hallbook',
-        'USER': 'root',
-        'PASSWORD': 'Pass@123',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            "init_command": "SET foreign_key_checks = 0;"
-        }
-    }
-}
+# DATABASES = {
+# #     'default': {
+# #         'ENGINE': 'django.db.backends.mysql',
+# #         'NAME': 'hallbook',
+# #         'USER': 'root',
+# #         'PASSWORD': 'Pass@123',
+# #         'HOST': '127.0.0.1',
+# #         'PORT': '3306',
+# #         'OPTIONS': {
+# #             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+# #             "init_command": "SET foreign_key_checks = 0;"
+# #         }
+# #     }
+# }
+DATABASES = {}
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
