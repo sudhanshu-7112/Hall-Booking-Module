@@ -1,1 +1,1 @@
-# Medera
+# Django Hall Booking module 
