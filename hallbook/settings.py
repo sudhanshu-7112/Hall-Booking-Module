@@ -35,7 +35,7 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.86.91','hall-booking-module-psi.vercel.app/']
+ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.86.91','hall-booking-module-psi.vercel.app/','.now.sh']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -172,6 +172,8 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
