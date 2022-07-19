@@ -29,19 +29,38 @@ SECRET_KEY = 'django-insecure-1dw_jmvzcw5#&=c_*y9mnjeu-@g$te-$_pxv*d^@gx4$mb^ba3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SAMESITE = None
 
-# SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-# SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_HTTPONLY = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.86.91']
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOW_CREDENTIALS = True
 
+CORS_ORIGIN_WHITELIST = (
+    'https://hall-booking-module.vercel.app',
+    'https://localhost:3000',
+    'http://localhost:3000'
+)
 
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Access-Control-Allow-Origin',
+]
+
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 # Application definition
 
 INSTALLED_APPS = [
@@ -49,6 +68,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'sslserver',
     'rest_framework_simplejwt.token_blacklist',
     'AoRole',
     'django.contrib.admin',

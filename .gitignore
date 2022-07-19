@@ -2,13 +2,14 @@
 .Python
 venv/
 env/
-*.sqlite3
+*.mysql
 .idea/
 # Project asset folders
 media/
 # Database
-db.sqlite3
+db.backends.mysql
 # Editor directories and files
 .idea
 # Byte-compiled / optimized / DLL files
 _pycache_/
+*.pyc
