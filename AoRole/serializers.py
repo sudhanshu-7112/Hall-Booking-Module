@@ -98,6 +98,15 @@ class Hall_book_emp_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class Hall_book_history_Serializer(serializers.ModelSerializer):
+    Hall_name=serializers.CharField(source='Hall_name.Hall_name')
+    emp_department=serializers.CharField(source='emp_department.department.department')
+
+    class Meta:
+        model = Hall_booking_Form
+        fields = '__all__'
+
+
 class HodRoleSerializer(serializers.ModelSerializer):
     emp_department = serializers.CharField(
         source='emp_department.department.department')
