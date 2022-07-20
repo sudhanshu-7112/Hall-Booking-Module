@@ -33,7 +33,7 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.85.167','hall-booking-module-psi.vercel.app/','.now.sh']
+ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.85.167','hall-booking-module-psi.vercel.app/','.now.sh','localhost:5000']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -189,10 +189,12 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True
 }
 
 # django_heroku.settings(locals())
+import django_heroku
+django_heroku.settings(locals())
