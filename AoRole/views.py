@@ -99,7 +99,7 @@ class Panel(generics.ListAPIView):
         return DynamicPanelSerializer
 
 
-class AllHall(APIView):
+class AllHallsAvailable(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -150,7 +150,7 @@ class Book_Hall(APIView):
         else:
             print(serializer.errors)
             return Response(serializer.errors)
-        return Response({'message': 'Hall Booked Successfully'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Hall Booking Request passed to HOD'}, status=status.HTTP_201_CREATED)
 
 
 class Hallsdropdown(generics.ListAPIView):
@@ -203,7 +203,7 @@ class AoApproval(APIView):
             serializer.save()
             if(request.data['booked'] == 1):
                 queryset = Hall_booking_Form.objects.get(id=pk)
-                hall = Conference_Hall.objects.get(id=request.data['hall'])
+                Conference_Hall.objects.get(id=request.data['hall'])
             return Response({'message': 'Succesfull'})
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

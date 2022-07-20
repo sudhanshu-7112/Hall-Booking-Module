@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
-import django_heroku
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,7 +33,7 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.86.91','hall-booking-module-psi.vercel.app/','.now.sh']
+ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.85.167','hall-booking-module-psi.vercel.app/','.now.sh']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -60,11 +58,10 @@ CORS_ALLOW_HEADERS = [
     'Access-Control-Allow-Origin',
 ]
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+# DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
@@ -80,7 +77,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -128,10 +124,6 @@ DATABASES = {
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=500)
-
-DATABASES['default'].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -173,13 +165,13 @@ MEDIA_URL = '/media/'
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+# STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-WHITENOISE_USE_FINDERS = True
+# WHITENOISE_USE_FINDERS = True
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type
@@ -203,4 +195,4 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True
 }
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

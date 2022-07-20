@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from AoRole.serializers import JWTAuthentication
-from AoRole.views import AllHall, Ao_Pending, Ao_Report, AoApproval, Book_Hall, Contact_issue, Halls, Hallsdropdown, Hod_accepted_rejected, Hod_pending_forms, HodApproval, Logout, No_Response_Ao, Panel, Register, ResolveIssue, Userdetails
+from AoRole.views import AllHallsAvailable, Ao_Pending, Ao_Report, AoApproval, Book_Hall, Contact_issue, Halls, Hallsdropdown, Hod_accepted_rejected, Hod_pending_forms, HodApproval, Logout, No_Response_Ao, Panel, Register, ResolveIssue, Userdetails
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -32,7 +32,7 @@ urlpatterns = [
     path('LeftPanel', Panel.as_view()),
     path('bookhall', Book_Hall.as_view()),
     path('register', Register.as_view()),
-    path('allhalls', AllHall.as_view()),
+    path('allhalls', AllHallsAvailable.as_view()),
     path('halls/dropdown', Hallsdropdown.as_view()),
     path('hod/pending', Hod_pending_forms.as_view()),
     path('hod/pending/<int:pk>', Hod_accepted_rejected.as_view()),
