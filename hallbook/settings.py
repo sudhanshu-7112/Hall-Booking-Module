@@ -35,7 +35,7 @@ SESSION_COOKIE_SECURE = True
 
 SESSION_COOKIE_HTTPONLY = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'hall-booking-module.herokuapp.com/','10.21.85.167','hall-booking-module-psi.vercel.app/','.now.sh','localhost:5000']
+ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_ALLOW_ALL = False
 
@@ -45,7 +45,7 @@ CORS_ORIGIN_WHITELIST = (
     'https://hall-booking-module.vercel.app',
     'https://localhost:3000',
     'http://localhost:3000',
-    'http://10.21.86.130:3000'
+    'http://10.21.85.91:3000'
 )
 
 CORS_ALLOW_HEADERS = [
