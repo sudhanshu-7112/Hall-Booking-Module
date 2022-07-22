@@ -31,37 +31,37 @@ SECRET_KEY = 'django-insecure-1dw_jmvzcw5#&=c_*y9mnjeu-@g$te-$_pxv*d^@gx4$mb^ba3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-SESSION_COOKIE_SAMESITE = None
+# SESSION_COOKIE_SAMESITE = None
 
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
-SESSION_COOKIE_HTTPONLY = False
+# SESSION_COOKIE_HTTPONLY = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'hall-booking-module.herokuapp.com' ]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
-CORS_ORIGIN_WHITELIST = (
-    'https://hall-booking-module.vercel.app',
-    'https://localhost:3000',
-    'http://localhost:3000',
-    'http://10.21.85.91:3000'
-)
+# CORS_ORIGIN_WHITELIST = (
+#     'https://hall-booking-module.vercel.app',
+#     'https://localhost:3000',
+#     'http://localhost:3000',
+#     'http://10.21.85.91:3000'
+# )
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'Access-Control-Allow-Origin',
-]
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+#     'Access-Control-Allow-Origin',
+# ]
 
 # DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 # Application definition
