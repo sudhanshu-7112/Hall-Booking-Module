@@ -119,7 +119,7 @@ class AllHallsAvailable(APIView):
             Pending_Bookings.objects.create(
                 user=user, from_date=fd, to_date=to, Participant_count=count)
         available_places = Hall_booking_Form.objects.filter(((Q(from_date__gte=fd) & Q(
-            from_date__lte=to)) | (Q(from_date__lte=fd) & Q(to_date__gte=to))| (Q(to_date__gte=fd) & Q(to_date__lte=to)) )& (Q(booked=True)))
+            from_date__lte=to)) | (Q(from_date__lte=fd) & Q(to_date__gte=to))| (Q(to_date__gte=fd) & Q(to_date__lte=to)))& (Q(booked=True)))
         serializer = Conference_Hall_Available(available_places, many=True)
         excluding_list = []
         for i in serializer.data:

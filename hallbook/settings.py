@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from datetime import timedelta
 import dj_database_url
+import psycopg2
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -65,7 +67,6 @@ CORS_ALLOW_HEADERS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
@@ -81,7 +82,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -116,24 +116,15 @@ WSGI_APPLICATION = 'hallbook.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hallbook',
-        'USER': 'root',
-        'PASSWORD': 'Pass@123',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            "init_command": "SET foreign_key_checks = 0;"
-        }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
     }
 }
 
-db_from_env = dj_database_url.config(conn_max_age=600)
+# db_from_env = dj_database_url.config(conn_max_age=600)
 
-DATABASES['default'].update(db_from_env)
+# DATABASES['default'].update(db_from_env)
 
-WHITENOISE_USE_FINDERS = True
+# WHITENOISE_USE_FINDERS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -179,6 +170,10 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATICFILES_DIRS= (
+    os.path.join(BASE_DIR, 'static'),
+)
+
 # WHITENOISE_USE_FINDERS = True
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -205,5 +200,5 @@ SIMPLE_JWT = {
 }
 
 # django_heroku.settings(locals())
-import django_heroku
-django_heroku.settings(locals())
+# import django_heroku
+# django_heroku.settings(locals())
